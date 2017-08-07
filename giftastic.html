@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Composer GifTastic</title>
+
+  <style>
+.item {
+  display: inline-block;
+  margin:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- <img src="https://media2.giphy.com/media/1hFxDX0fnXPwY/giphy_s.gif?fingerprint=e1bb72ff598765a23944345a2e9a300f">
+ -->  <div id="buttons">
+    <!-- <button data-person="Bach">
+        Bach
+    </button> -->
+    <button data-person="Beethoven">
+        Beethoven
+    </button>
+    <button data-person="chopin">
+      Chopin
+    </button>
+    <button data-person="debussy">
+      Debussy
+    </button>
+    <button data-person="haydn">
+      Haydn
+    </button>
+    <button data-person="liszt">
+      Liszt
+    </button>
+    <button data-person="mozart">
+      Mozart
+    </button>
+    <button data-person="rachmaninoff">
+      Rachmaninoff
+    </button>
+    <button data-person="ravel">
+      Ravel
+    </button>
+    <button data-person="schubert">
+      Schubert
+    </button>
+    <button data-person="shostakovich">
+      Shostakovich
+    </button>
+    <button data-person="tchaikovsky">
+      Tchaikovsky
+    </button>
+    <button data-person="verdi">
+      Verdi
+    </button>
+    <button data-person="Vivaldi">
+      Vivaldi
+    </button>
+
+
+  </div>
+
+  <div id="gifs-appear-here">
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $("button").on("click", function() {
+      var person = $(this).attr("data-person");
+      var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+        person + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+      $("#gifs-appear-here").empty();
+      $.ajax({
+          url: queryURL,
+          method: "GET"
+        })
+        .done(function(response) {
+          var results = response.data;
+          // console.log(results);
+
+          for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div class='item'>");
+
+            var rating = results[i].rating;
+
+            // var animatedImageURL = results[i].images.original.url;
+            // // console.log ("Animated url is " +animatedImageURL);
+            // var stillImageURL = results[i].images.original_still.url;
+            // // console.log ("Still url is "+ stillImageURL);
+            // var stillImageURLs = [];
+            // stillImageURLs.push(stillImageURL);
+            // // console.log(stillImageURLs);
+            // var animatedImageURLs = [];
+            // animatedImageURLs.push(animatedImageURL);
+            // // console.log(animatedImageURLs);
+
+
+
+            var p = $("<p>").text("Rating: " + rating);
+
+
+            var personImage = $("<img class='item'>");
+            personImage.attr("src", results[i].images.original_still.url);
+            personImage.attr("data-still", results[i].images.original_still.url);
+            personImage.attr("data-animate", results[i].images.original.url);
+            personImage.attr("data-state", "still");
+
+
+            gifDiv.prepend(p);
+            gifDiv.prepend(personImage);
+
+            $("#gifs-appear-here").prepend(gifDiv);
+          }
+
+
+
+
+        });
+
+
+
+    });
+
+
+      $(document).on("click", ".item", function () {
+      var state = $(this).attr("data-state");
+      var animate = $(this).attr("data-animate");
+      var still = $(this).attr("data-still");
+
+    if (state == "still") {
+        $(this).attr("src", animate);
+        $(this).attr("data-state", "animate");
+     }
+
+      else {
+        $(this).attr("src", still);
+        $(this).attr("data-state", "still");
+      }
+    });
+
+
+
+  </script>
+</body>
+
+</html>

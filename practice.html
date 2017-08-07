@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Composer GifTastic</title>
+
+  <style>
+.item {
+  display: inline-block;
+  margin:10px;
+}
+</style>
+</head>
+
+<body>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $("button").on("click", function() {
+      var person = $(this).attr("data-person");
+      var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+        person + "&api_key=dc6zaTOxFJmzC&limit=10";
+      var state = $(this).attr("data-state");
+      var animate = $(this).attr("data-animate");
+      var still = $(this).attr("data-still");
+      $("#gifs-appear-here").empty();
+      $.ajax({
+          url: queryURL,
+          method: "GET"
+        })
+        .done(function(response) {
+          var results = response.data;
+          // console.log(results);
+
+          for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div class='item'>");
+
+            var rating = results[i].rating;
+
+            var stillImageURL = results[i].images.original_still.url;
+            console.log(stillImageURL);
+              // var stillImageURLs = [];
+              // stillImageURLs.push(stillImageURL);
+              // console.log(stillImageURLs);
+            // console.log ("Still url is "+ stillImageURL);
+            // var animatedImageURL = results[i].images.original.url;
+            // console.log ("Animated url is " +animatedImageURL);
+
+            var p = $("<p>").text("Rating: " + rating);
+
+
+            var personImage = $("<img class='item'>");
+            personImage.attr("src", results[i].images.original_still.url);
+            // personImage.attr("data-state", "still");
+
+
+            gifDiv.prepend(p);
+            gifDiv.prepend(personImage);
+
+            $("#gifs-appear-here").prepend(gifDiv);
+          }
+
+    //       $(document).on("click", ".item", function() {
+    //     if (personImage.attr("data-state") == "still"){
+    //   alert ("click");
+
+    //       $(personImage).attr("src", results[i].images.original.url);
+    //       $(personImage).attr("data-state", "animate");
+    //     }
+    //     else {
+    //       $(personImage).attr("src", results[i].images.original_still.url);
+    //       $(personImage).attr("data-state", "still");
+    //     }
+    // });
+
+
+
+        });
+
+
+
+    });
+
+// $(document).on("click", ".item", function() {
+//         if (personImage.attr("data-state") == "still"){
+//       alert ("click");
+//     }
+// });
+
+  </script>
+</body>
+
+</html>
